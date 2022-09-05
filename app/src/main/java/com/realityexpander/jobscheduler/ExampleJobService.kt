@@ -7,6 +7,7 @@ import android.util.Log
 
 class ExampleJobService : JobService() {
     private var jobCancelled = false
+
     override fun onStartJob(params: JobParameters): Boolean {
         Log.d(TAG, "Job started")
         doBackgroundWork(params)
@@ -14,12 +15,13 @@ class ExampleJobService : JobService() {
     }
 
     private fun doBackgroundWork(params: JobParameters) {
-        Thread(Runnable {
+        Thread( Runnable {
             for (i in 0..9) {
                 Log.d(TAG, "run: $i")
                 if (jobCancelled) {
                     return@Runnable
                 }
+
                 try {
                     Thread.sleep(1000)
                 } catch (e: InterruptedException) {
@@ -27,6 +29,7 @@ class ExampleJobService : JobService() {
                 }
             }
             Log.d(TAG, "Job finished")
+
             jobFinished(params, false)
         }).start()
     }

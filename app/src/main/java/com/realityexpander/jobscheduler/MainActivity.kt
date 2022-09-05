@@ -18,10 +18,12 @@ class MainActivity : AppCompatActivity() {
     fun scheduleJob(v: View?) {
         val componentName = ComponentName(this, ExampleJobService::class.java)
         val info = JobInfo.Builder(123, componentName)
-            .setRequiresCharging(true)
+            //.setRequiresCharging(true) // will only run when the device is charging (doesnt work on pixel3)
             .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
+//            .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
             .setPersisted(true)
-            .setPeriodic((15 * 60 * 1000).toLong())
+            //.setPeriodic((15 * 60 * 1000).toLong()) // minimum is 15 minutes (forced internally)
+            .setMinimumLatency(1000)
             .build()
         val scheduler = getSystemService(JOB_SCHEDULER_SERVICE) as JobScheduler
         val resultCode = scheduler.schedule(info)
